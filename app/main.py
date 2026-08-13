@@ -1,8 +1,7 @@
 from fastapi import FastAPI
-
-app = FastAPI(title="Mini Calculator")
-
-
-@app.get("/health")
-def health() -> dict:
-    return {"status": "ok"}
+from fastapi.responses import JSONResponse
+from app.history.endpoints import router
+def create_app():
+    app = FastAPI()
+    app.include_router(router)
+    return app
