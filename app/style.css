@@ -1,0 +1,19 @@
+/* style.css */
+body {
+	background-color: #000;
+	color: #fff;
+}
+
+/* CSS Grid Layout */
+.keypad {
+	display: grid;
+	padding: 20px;
+	grid-template-columns: repeat(4, 1fr);
+	grid-gap: 10px;
+}
+
+/* Typography */
+.screen {
+	font-family: Arial, sans-serif;
+	padding: 20px;
+}
