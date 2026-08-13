@@ -1,8 +1,12 @@
-from fastapi import FastAPI
+from main import display_result
 
-app = FastAPI(title="Mini Calculator")
+def button_click(event):
+    button = event.target
+    if button.id == 'equals-btn':
+        calculate_result()
+    else:
+        display_result(str(button.innerText))
 
-
-@app.get("/health")
-def health() -> dict:
-    return {"status": "ok"}
+def calculate_result():
+    # TO DO: implement calculation logic here
+    pass

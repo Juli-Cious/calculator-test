@@ -1,0 +1,15 @@
+/* keypad.css */
+.keypad-button {
+	background-color: #333;
+	padding: 10px;
+	roundness: 5px;
+	transition: 0.5s ease-in-out;
+}
+
+.keypad-button:hover {
+	background-color: #555;
+}
+
+.keypad-button:active {
+	background-color: #777;
+}
