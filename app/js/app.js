@@ -5,7 +5,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const clearBtn = document.getElementById('clear-btn');
     const equalsBtn = document.getElementById('equals-btn');
     const numBtns = document.querySelectorAll('.num-btn');
-    const opBtns = document.querySelectorAll('.op-btn');
+    const opBtns = document.querySelectorAll('.op-btn, .adv-op-btn');
+    const historyList = document.getElementById('history-list');
+    const clearHistoryBtn = document.getElementById('clear-history-btn');
+    const historyPanel = document.getElementById('history-panel');
+    const historyToggleBtn = document.getElementById('history-toggle-btn');
 
     let currentInput = '0';
     let previousOperand = null;
@@ -28,6 +32,45 @@ document.addEventListener('DOMContentLoaded', () => {
         if (isNaN(num) || !isFinite(num)) return 'Error';
         // Round to 10 decimal places to eliminate floating point artifacts like 0.30000000000000004
         return String(Number(Number(num).toFixed(10)));
+    }
+
+    // Add entry to history list
+    function addHistoryEntry(expression, result) {
+        if (!historyList) return;
+        const item = document.createElement('div');
+        item.className = 'history-item';
+        item.textContent = `${expression} = ${result}`;
+        
+        // Clicking a history item restores that calculation's result back to #display-screen
+        item.addEventListener('click', () => {
+            currentInput = result;
+            previousOperand = null;
+            currentOperator = null;
+            shouldResetScreen = true;
+            isErrorState = false;
+            updateDisplay();
+        });
+
+        historyList.prepend(item);
+    }
+
+    // Clear History Button
+    if (clearHistoryBtn) {
+        clearHistoryBtn.addEventListener('click', () => {
+            if (historyList) {
+                historyList.innerHTML = '';
+            }
+        });
+    }
+
+    // History Panel Toggle
+    if (historyToggleBtn && historyPanel) {
+        historyToggleBtn.addEventListener('click', () => {
+            historyPanel.classList.toggle('collapsed');
+            const isCollapsed = historyPanel.classList.contains('collapsed');
+            historyToggleBtn.setAttribute('aria-expanded', !isCollapsed);
+            historyToggleBtn.textContent = isCollapsed ? 'History ▸' : 'History ▾';
+        });
     }
 
     // Numeric buttons (0-9, and decimal point if present)
@@ -76,14 +119,16 @@ document.addEventListener('DOMContentLoaded', () => {
                     return;
                 }
                 let result = Math.sqrt(curr);
-                currentInput = formatResult(result);
+                let formatted = formatResult(result);
+                addHistoryEntry(`sqrt(${curr})`, formatted);
+                currentInput = formatted;
                 shouldResetScreen = true;
                 updateDisplay();
                 return;
             }
 
             if (currentOperator !== null && !shouldResetScreen) {
-                calculate();
+                calculate(true);
                 if (isErrorState) return;
             }
             previousOperand = currentInput;
@@ -92,12 +137,13 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    function calculate() {
+    function calculate(isIntermediate = false) {
         if (currentOperator === null || previousOperand === null) return;
 
         let prev = parseFloat(previousOperand);
         let curr = parseFloat(currentInput);
         let result = 0;
+        let opSymbol = currentOperator;
 
         switch (currentOperator) {
             case '+':
@@ -109,6 +155,7 @@ document.addEventListener('DOMContentLoaded', () => {
             case '*':
             case '×':
                 result = prev * curr;
+                opSymbol = '*';
                 break;
             case '/':
             case '÷':
@@ -122,6 +169,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     return;
                 } else {
                     result = prev / curr;
+                    opSymbol = '/';
                 }
                 break;
             case '^':
@@ -144,7 +192,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
         }
 
-        currentInput = formatResult(result);
+        let formatted = formatResult(result);
+        
+        // Log to history audit log on successful calculation (equals or full chain evaluation)
+        if (!isIntermediate) {
+            addHistoryEntry(`${prev} ${opSymbol} ${curr}`, formatted);
+        }
+
+        currentInput = formatted;
         previousOperand = null;
         currentOperator = null;
         shouldResetScreen = true;
@@ -156,7 +211,7 @@ document.addEventListener('DOMContentLoaded', () => {
         equalsBtn.addEventListener('click', () => {
             if (isErrorState) return;
             if (currentOperator === null || previousOperand === null) return;
-            calculate();
+            calculate(false);
         });
     }
 
