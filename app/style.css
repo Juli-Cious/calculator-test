@@ -1,2 +1,199 @@
-/* Base application styles */
-body { font-family: system-ui, sans-serif; margin: 0; padding: 20px; }
+/* Base application styles & Modern Dark Theme */
+:root {
+  --bg-color: #0f172a;
+  --surface-color: #1e293b;
+  --surface-hover: #334155;
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --accent-num: #3b82f6;
+  --accent-num-hover: #60a5fa;
+  --accent-op: #f59e0b;
+  --accent-op-hover: #fbbf24;
+  --accent-equals: #10b981;
+  --accent-equals-hover: #34d399;
+  --accent-clear: #ef4444;
+  --accent-clear-hover: #f87171;
+  --border-color: #334155;
+  --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+}
+
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-primary);
+  margin: 0;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+/* Calculator Container / Layout */
+.calculator-container, body {
+  box-sizing: border-box;
+}
+
+/* Display screen styling */
+#display-screen {
+  background-color: var(--surface-color);
+  color: var(--text-primary);
+  font-size: 2.25rem;
+  font-weight: 600;
+  text-align: right;
+  padding: 20px 24px;
+  border-radius: 16px;
+  margin-bottom: 20px;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--border-color);
+  word-break: break-all;
+  min-height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 100%;
+  max-width: 420px;
+}
+
+/* Keypad Grid Layout */
+#keypad {
+  width: 100%;
+  max-width: 420px;
+  background-color: var(--surface-color);
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border-color);
+  margin-bottom: 20px;
+}
+
+.keypad-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+/* Button general styling & micro-animations */
+button {
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 1.15rem;
+  font-weight: 600;
+  padding: 16px;
+  border-radius: 12px;
+  border: none;
+  background-color: var(--surface-hover);
+  color: var(--text-primary);
+  transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Hover highlights & Active press scale effect */
+button:hover {
+  background-color: var(--accent-num);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+button:active {
+  transform: scale(0.95);
+}
+
+/* Specific button styles */
+.num-btn {
+  background-color: #273548;
+}
+
+.num-btn:hover {
+  background-color: var(--accent-num-hover);
+}
+
+.op-btn, .adv-op-btn {
+  background-color: #334155;
+  color: var(--accent-op);
+}
+
+.op-btn:hover, .adv-op-btn:hover {
+  background-color: var(--accent-op);
+  color: var(--bg-color);
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+}
+
+#clear-btn {
+  background-color: rgba(239, 68, 68, 0.15);
+  color: var(--accent-clear);
+}
+
+#clear-btn:hover {
+  background-color: var(--accent-clear);
+  color: var(--text-primary);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
+#equals-btn {
+  background-color: var(--accent-equals);
+  color: var(--bg-color);
+  grid-column: span 2;
+}
+
+#equals-btn:hover {
+  background-color: var(--accent-equals-hover);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+}
+
+/* History Panel styling (Flexbox) */
+#history-panel {
+  width: 100%;
+  max-width: 420px;
+  background-color: var(--surface-color);
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+#history-list {
+  max-height: 150px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+
+#clear-history-btn {
+  background-color: var(--surface-hover);
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  padding: 10px;
+}
+
+#clear-history-btn:hover {
+  background-color: var(--border-color);
+  color: var(--text-primary);
+  box-shadow: none;
+}
+
+/* Responsive Styling for mobile viewports */
+@media (max-width: 480px) {
+  body {
+    padding: 12px;
+  }
+  
+  #display-screen, #keypad, #history-panel {
+    max-width: 100%;
+  }
+
+  button {
+    padding: 14px 10px;
+    font-size: 1.05rem;
+  }
+}
