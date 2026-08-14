@@ -21,6 +21,12 @@ def test_app_js_content():
     assert "-" in content
     assert "*" in content or "×" in content
     assert "/" in content or "÷" in content
+    # MINI-40 checks
+    assert "Error: Division by Zero" in content
+    assert "Error: Invalid Input" in content
+    assert "Math.pow" in content or "^" in content
+    assert "Math.sqrt" in content or "sqrt" in content
+    assert "toFixed" in content or "formatResult" in content
 
 def test_index_html_has_calculator_elements():
     with open("app/index.html", "r", encoding="utf-8") as f:
