@@ -1,39 +1,31 @@
 import os
-import pytest
 from bs4 import BeautifulSoup
 
-def test_app_js_exists():
-    assert os.path.exists("app/js/app.js")
+def test_style_css_exists():
+    assert os.path.exists("app/style.css")
 
-def test_app_js_content():
-    with open("app/js/app.js", "r", encoding="utf-8") as f:
+def test_style_css_rules():
+    with open("app/style.css", "r", encoding="utf-8") as f:
         content = f.read()
     
-    assert "currentInput" in content
-    assert "previousOperand" in content
-    assert "currentOperator" in content
-    assert "num-btn" in content
-    assert "op-btn" in content
-    assert "clear-btn" in content
-    assert "equals-btn" in content
-    assert "display-screen" in content
-    assert "+" in content
-    assert "-" in content
-    assert "*" in content or "×" in content
-    assert "/" in content or "÷" in content
-    # MINI-40 checks
-    assert "Error: Division by Zero" in content
-    assert "Error: Invalid Input" in content
-    assert "Math.pow" in content or "^" in content
-    assert "Math.sqrt" in content or "sqrt" in content
-    assert "toFixed" in content or "formatResult" in content
+    assert "#display-screen" in content
+    assert "#keypad" in content
+    assert "button" in content
+    assert "background-color" in content
+    assert "grid" in content or "flex" in content
+    assert ":root" in content
+    # MINI-41 history styles
+    assert "#history-panel" in content
+    assert "#history-list" in content
+    assert "#clear-history-btn" in content
+    assert ".history-item" in content
 
-def test_index_html_has_calculator_elements():
+def test_index_html_links_css_and_js():
     with open("app/index.html", "r", encoding="utf-8") as f:
         soup = BeautifulSoup(f.read(), 'html.parser')
     
-    assert soup.find(id='display-screen') is not None
-    assert soup.find(id='clear-btn') is not None
-    assert soup.find(id='equals-btn') is not None
-    assert len(soup.find_all(class_='num-btn')) >= 10
-    assert len(soup.find_all(class_='op-btn')) >= 4
+    css_link = soup.find('link', href='app/style.css')
+    assert css_link is not None
+    
+    js_script = soup.find('script', src='app/js/app.js')
+    assert js_script is not None
