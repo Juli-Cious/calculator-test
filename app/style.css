@@ -1,2 +1,12 @@
-/* Base application styles */
-body { font-family: system-ui, sans-serif; margin: 0; padding: 20px; }
+.display {
+  display: flex;
+  justify-content: flex-end;
+  padding: 10px;
+  background-color: #444;
+  border-radius: 8px
+}
+
+.history {
+  padding: 10px;
+  background-color: #555
+}
